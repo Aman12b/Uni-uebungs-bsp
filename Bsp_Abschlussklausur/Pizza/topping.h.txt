@@ -1,0 +1,24 @@
+#ifndef TOPPING_H
+#define TOPPING_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+//Definition der Klasse Topping
+class Topping{
+  string name,allergenes;
+  bool spec;
+  
+  
+  public:
+  Topping(string Name,string Allergen="",bool spez=false);
+  bool is_specialty() const;
+ 	bool operator== (Topping top) const;
+  ostream& print(ostream& o);
+  bool checkalergen(char x);
+};
+	ostream& operator<<(ostream& o, Topping top);
+#endif

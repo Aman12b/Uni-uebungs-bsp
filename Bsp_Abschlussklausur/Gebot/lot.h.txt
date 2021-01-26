@@ -1,0 +1,33 @@
+#ifndef LOT_H
+#define LOT_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+using namespace std;
+
+enum class Kategorie {Schmuck, Moebel, Kunst, Sonstiges};
+
+extern const vector<string> kategorie_namen;
+
+//Definition der Klasse Lot
+class Lot{
+  string name;
+  int min;
+  Kategorie k;
+  vector<Gebot> gebvec;
+  
+  public:
+  Lot(string n,int b,Kategorie kat=Kategorie::Sonstiges);
+  bool ist_offen() const;//Kategorie::Schmuck oder Kategorie::Kunst true
+  bool bieten(const Gebot&);
+  ostream& print(ostream& o);
+   Gebot zuschlag() const;
+static vector<Lot> probleme(vector<Lot>&);
+  bool minerreicht() const;
+  int anzgebot() const;
+};
+	ostream& operator<<(ostream& o, Lot l);
+
+#endif

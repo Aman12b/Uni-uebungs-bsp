@@ -1,0 +1,101 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"zutat.h"
+#include"smoothie.h"
+using namespace std;
+
+
+
+	Smoothie::Smoothie(string Name){
+    
+    if(Name.length()<=0){
+      throw runtime_error("ungueltiger Name");
+    }
+    name=Name;
+  };
+  void Smoothie::hinzu(const Zutat& z){
+    zut.push_back(z);
+    
+  };
+  int Smoothie::brennwert() const{
+    int sum{0};
+    
+    for(Zutat z: zut){
+      sum+=z.brennwert();
+    };
+    return sum;
+    
+  };
+	void Smoothie::unterheben(const Zutat& z){
+    if(zut.empty()){
+      throw runtime_error("keine zutaten");
+    }
+    vector<Zutat> neu;
+    
+    for(Zutat zu:zut){
+     neu.push_back(z); 
+     neu.push_back(zu); 
+      
+    }  
+    zut=neu;
+  };
+	//[Apfel 27 kJ]*2, [Birne 31 kJ]*1
+	void Smoothie::liste(ostream& o) const{
+   unsigned long c{0};
+    unsigned long sum{0};
+    string s;
+    unsigned long i{2};
+    vector<Zutat> neu;
+    for(Zutat z:zut){
+      i++;
+      
+      for(Zutat zu:zut){
+      	if(zu==z){
+          c++;
+        }
+    	}
+      bool ck{false};
+      for(Zutat z1:neu){
+        if(z1==z){
+          ck=true;
+        }
+      }
+      if(!ck){
+        sum+=c;
+        neu.push_back(z);
+        z.print(o);
+       	if(sum==zut.size()){
+      	o<<"*"<<c;
+        }else{
+        o<<"*"<<c<<", ";};
+      	}
+      c=0;
+      
+    }
+    
+  
+  };
+
+//[{[Apfel 27 kJ], [Birne 31 kJ], [Apfel 27 kJ]}, Turm von Hanoi]
+
+
+  ostream& Smoothie::print(ostream& o){
+    o<<"[{";
+    unsigned long i{1};
+    for(Zutat z:zut){
+      z.print(o);
+      if(i!=zut.size()){
+        o<<", ";
+      }
+      i++;
+    }
+    o<<"}, "<<name<<"]";
+    return o;
+  };
+  
+	ostream& operator<<(ostream& o,Smoothie s){
+    return s.print(o);
+    
+  };

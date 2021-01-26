@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+#include"spieler.h"
+
+using namespace std;
+
+//Implementierung der Klasse Spieler
+
+
+	Spieler::Spieler(string n,int w,Position pos){
+    
+    if(n.length()<=0||(w<10||w>500)){
+      
+      throw runtime_error("ungeltige eingabe");
+    }
+    
+    name=n;
+    wert=w;
+    p=pos;
+    
+  };
+	int Spieler::getp(){
+    return static_cast<int>(p);
+    
+  };
+	bool Spieler::operator==(const Spieler& s) const{
+    
+    if(s.name==name){
+      
+      return true;}
+    else
+    {
+      return false;}
+    
+  };
+
+		ostream& Spieler::print(ostream& o){
+      //[Ronaldo, 120 Mio Euro, Sturm]
+      int pos{static_cast<int>(p)};
+      o<<"[";
+      o<<name;
+      o<<", ";
+      o<<wert;
+      o<<" Mio Euro, ";
+      o<<positionsnamen.at(pos);
+      o<<"]";
+      return o;
+    };
+
+	ostream& operator<<(ostream& o,Spieler s){
+    return s.print(o);
+  };

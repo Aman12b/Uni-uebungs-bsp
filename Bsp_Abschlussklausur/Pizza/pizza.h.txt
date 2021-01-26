@@ -1,0 +1,28 @@
+#ifndef PIZZA_H
+#define PIZZA_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include "topping.h"
+
+using namespace std;
+
+//Standard toppings
+const vector<Topping> standard_toppings{{"Tomato sauce"}, {"Cheese","G"}};
+
+class Pizza{
+//Definition der Klasse Pizza
+
+vector<Topping> belag;
+  
+public:
+  
+Pizza(vector<Topping> liked=vector<Topping>(),vector<Topping> unliked=vector<Topping>());
+  double price() const;
+  ostream& print(ostream& o);
+   string allergenes() const;
+  void accommodate(const string& forbidden);
+};
+ostream& operator<<(ostream& o, Pizza p);
+#endif

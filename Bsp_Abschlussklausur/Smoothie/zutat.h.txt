@@ -1,0 +1,24 @@
+#ifndef ZUTAT_H
+#define ZUTAT_H
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+using namespace std;
+
+//Definition der Klasse Zutat
+class Zutat{
+  string name;
+  int kj;
+  
+  
+  public:
+  Zutat(string Name, int brennwert=32);
+  int brennwert() const;
+  bool operator==(Zutat z);
+  ostream& print(ostream& o);
+  
+};
+ostream& operator<<(ostream& o, Zutat z);
+#endif

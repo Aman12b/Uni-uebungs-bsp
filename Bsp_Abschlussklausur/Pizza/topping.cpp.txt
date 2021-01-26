@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "topping.h"
+
+using namespace std;
+
+//Implementierung der Klasse Topping
+
+  Topping::Topping(string Name,string Allergen,bool spez){
+    
+    for(char a:Allergen){
+      if(a=='J'||a=='K'||a=='Q'){
+        throw runtime_error("ungeltiges allergen");
+      }
+    }
+    if(Name.length()<=0){
+      throw runtime_error("ungueltiger name");
+    }
+    name=Name;
+    allergenes=Allergen;
+    spec=spez;
+    
+  };
+  bool Topping::is_specialty() const{
+    
+    return spec;
+  };
+  bool Topping::operator== (Topping top) const{
+    
+    if(name==top.name){
+      return true;
+    }
+    return false;
+  };
+
+	bool Topping::checkalergen(char x){
+    
+    for(char c:allergenes){
+    	if(c==x){
+     		return true; 
+    	}
+    }
+    return false;
+  };
+
+  ostream& Topping::print(ostream& o){
+    //Frutti di mare (A, B, D, R)
+    o<<name;
+    if(allergenes.length()!=0){
+      o<<" (";
+      for(unsigned long i{0};i<allergenes.length();i++){
+        o<<allergenes.at(i);
+        if(i!=allergenes.length()-1){
+          o<<", ";
+        }
+      }
+      o<<")";
+      
+    }
+    return o;
+  };
+
+
+	ostream& operator<<(ostream& o, Topping top){
+    return top.print(o);
+  };

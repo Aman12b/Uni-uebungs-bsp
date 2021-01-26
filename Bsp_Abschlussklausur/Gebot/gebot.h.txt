@@ -1,0 +1,27 @@
+#ifndef GEBOT_H
+#define GEBOT_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+using namespace std;
+
+//Definition der Klasse Gebot
+class Gebot{
+  
+  string name;
+  int geb{0};
+  public:
+  Gebot(string n,int b=100);
+bool selbe_bieterin(const Gebot&) const;
+bool operator==(const Gebot&) const;
+bool operator<(const Gebot&) const;
+int getgeb() const;
+bool operator>=(int) const;
+ostream& print(ostream& o);
+  
+};
+
+	ostream& operator<<(ostream& o,Gebot g);
+#endif

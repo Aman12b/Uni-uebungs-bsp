@@ -1,0 +1,96 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+#include"kleidst.h"
+#include"waschm.h"
+using namespace std;
+
+
+	WaschM::WaschM(int Ladungsgewicht){
+    if(Ladungsgewicht>=4000 && Ladungsgewicht<=50000){
+      load=Ladungsgewicht;
+      
+    }else{
+      throw runtime_error("load out of range");
+    }
+    
+  };
+  void WaschM::zuladen(const vector<KleidSt>& z){
+    
+    for(KleidSt k:z){
+      klist.push_back(k);
+      
+    }
+  };
+  void WaschM::waschen(Programm pro){
+    int total{0};
+    for(KleidSt k:klist){
+      total+=k.get_gewicht();
+      
+      if(total>load||!k.vertraeglich(pro)){
+        throw runtime_error("Fehler beim waschen");
+      }
+      
+    }
+    klist.erase(klist.begin(),klist.end());
+    
+  };
+
+	int WaschM::programme() const{
+    
+    vector<int> anz;
+    for(KleidSt k:klist){
+      int pro{static_cast<int>(k.get_pro())};
+      bool inside{false};
+      for(int a:anz){
+        if(pro==a){
+          inside=true;
+        }
+      }
+      
+      if(inside==false){
+        anz.push_back(pro);
+    		}    
+    }
+   return anz.size();
+	};
+	
+
+	vector<KleidSt> WaschM::aussortieren(Programm pro){
+    vector<KleidSt> neu;
+    
+    for(unsigned long i{0};i<klist.size();i++){
+      if(!klist.at(i).vertraeglich(pro)){
+     	 neu.push_back(klist.at(i));
+        klist.erase(klist.begin()+i);
+        i--;
+    	}
+    }
+    return neu;
+  };
+
+  ostream& WaschM::print(ostream& o){
+    //[5000 g {[Bluse, 120 g, Kochwaesche], [Bluse, 100 g, Feinwaesche]}]
+    
+    o<<"["<<load<<" g {";
+    unsigned long i{1};
+    for(KleidSt k:klist){
+      k.print(o);
+      
+      if(i!=klist.size()){
+				o<<", ";
+      }
+      i++;
+    }
+    o<<"}]";
+    return o;
+  };
+ 
+	ostream& operator<<(ostream& o,WaschM w){
+    
+    return w.print(o);
+  }
+
+
+	

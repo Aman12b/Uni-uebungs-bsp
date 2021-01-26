@@ -1,0 +1,62 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+#include"kleidst.h"
+using namespace std;
+
+vector<string> programm_namen {"Kochwaesche", "Normalwaesche", "Buntwaesche", "Feinwaesche"};
+
+
+  KleidSt::KleidSt(string Name, int Gewicht,Programm prog){
+    
+    if(Name.length()>0&&(Gewicht>0&&Gewicht<5000)){
+      name=Name;
+      gewicht=Gewicht;
+      p=prog;
+      
+    }else{
+      
+      throw runtime_error("ungeultige Angaben");
+    }
+    
+  };
+
+	Programm KleidSt::get_pro(){
+    
+    return p;
+  };
+
+  bool KleidSt::vertraeglich(Programm pro)const{
+    
+    if(pro>=p){
+      return true;
+    }else{
+      return false;
+    }
+    
+  };
+	int KleidSt::get_gewicht(){
+    
+    return gewicht;
+    
+  };
+  ostream& KleidSt::print(ostream& o){
+    //Die Ausgabe eines Objekts des Typs KleidSt muss in der Form
+		//[Bezeichnung, Gewicht g, Pflegehinweis] erfolgen. , z.B.: [Bluse, 120 g, Kochwaesche]. (Der vordefinierte Vektor programm_namen
+		//kann für die Ausgabe der Enumerationswerte verwendet werden.)
+    int index=static_cast<int>(p);
+    o<<"["<<name<<", "<<gewicht<<" g, "<<programm_namen.at(index)<<"]";
+    
+    return o;
+    
+  };
+	ostream& operator<<(ostream& o,KleidSt k){
+    return k.print(o);
+    
+  };
+
+
+  
+  
+  

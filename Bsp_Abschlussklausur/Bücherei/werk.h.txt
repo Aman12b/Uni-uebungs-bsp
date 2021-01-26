@@ -1,0 +1,28 @@
+#ifndef WERK_H
+#define WERK_H
+
+#include<iostream>
+#include<stdexcept>
+#include<vector>
+#include<string>
+#include"exemplar.h"
+using namespace std;
+class Werk{
+  
+  string autor,name;
+  int jahr;
+  vector<Exemplar> exp;
+  public:
+  Werk(string Autor,string Name,int Erscheinungsjahr);
+  void erwerben(int nr, Zustand z);
+  bool entleihen();
+  void retournieren(int index, Zustand z);
+  
+  
+  ostream& print(ostream& o);
+  
+};
+ostream& operator<<(ostream& o,Werk w);
+//Definition der Klasse Werk
+
+#endif

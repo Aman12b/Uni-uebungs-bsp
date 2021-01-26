@@ -1,0 +1,26 @@
+#ifndef WASCHM_H
+#define WASCHM_H
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+#include"kleidst.h"
+using namespace std;
+
+//Definition der Klasse WaschM
+class WaschM{
+  int load{0};
+  vector<KleidSt> klist;
+  
+  
+  public:
+  WaschM(int Ladungsgewicht);
+  void zuladen(const vector<KleidSt>& z);
+  void waschen(Programm);
+  ostream& print(ostream& o);
+  int programme() const;
+  vector<KleidSt> aussortieren(Programm);
+};
+	ostream& operator<<(ostream& o,WaschM w);
+#endif

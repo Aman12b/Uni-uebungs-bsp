@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include "gebot.h"
+using namespace std;
+
+
+
+ 	Gebot::Gebot(string n,int b){
+    if(n.length()<=0||b<=0||b>10000000){
+      throw runtime_error("fehler");
+    }
+    name=n;
+    geb=b;
+    
+  };
+  bool Gebot::selbe_bieterin(const Gebot& g) const{
+    
+    if(g.name==name){
+      return true;
+    }
+    return false;
+  };
+bool Gebot::operator==(const Gebot& g) const{
+  
+  	if(g.geb==geb){
+      return true;
+    }
+  return false;
+	};
+bool Gebot::operator<(const Gebot& g) const{
+  
+  if(g.geb>geb){
+    return true;
+  }
+  return false;
+  
+	};
+
+
+int Gebot::getgeb() const{
+  return geb;
+};
+
+bool Gebot::operator>=(int i) const{
+  if(i<=geb){
+    return true;
+  }
+  return false;
+  
+	};
+ostream& Gebot::print(ostream& o){
+  //[Susi: 263 Euro]
+	
+    o<<"["<<name<<": ";
+    o<<geb<<" Euro]";
+		return o;
+  };
+
+	ostream& operator<<(ostream& o,Gebot g){
+    
+    return g.print(o);
+  };

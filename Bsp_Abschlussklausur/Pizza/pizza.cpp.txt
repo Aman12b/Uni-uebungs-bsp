@@ -1,0 +1,170 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include "topping.h"
+#include "pizza.h"
+
+using namespace std;
+
+//Implementierung der Klasse Pizza
+
+Pizza::Pizza(vector<Topping> liked,vector<Topping> unliked){
+  
+  	for(Topping sta:standard_toppings){
+      bool inside=false;
+      for(Topping t:unliked){
+      	if(t==sta){
+          inside=true;
+        }
+   	 }
+      if(inside==false){
+        belag.push_back(sta);
+      }
+      inside=false;
+    }
+  
+  
+  for(Topping sta:liked){
+      
+        
+        bool doppelt=false;
+        for(Topping t:belag){
+          if(t==sta){
+            doppelt=true;
+          }
+          
+        }
+        if(doppelt==false){
+          belag.push_back(sta);
+        }
+    }
+  
+  /*
+  for(Topping sta:liked){
+      bool inside=false;
+      for(Topping t:unliked){
+      	if(t==sta){
+          inside=true;
+        }
+   	 }
+      if(inside==false){
+        
+        bool doppelt=false;
+        for(Topping t:belag){
+          if(t==sta){
+            doppelt=true;
+          }
+          
+        }
+        if(doppelt==false){
+          belag.push_back(sta);
+        }
+        
+      }
+      inside=false;
+    }
+  
+  */
+  
+  if(belag.size()==0){
+    throw runtime_error("kein Belag");
+  }
+  
+};
+
+ string Pizza::allergenes() const{
+   
+     string al;
+   
+   for (char c{'A'}; c<'S'; ++c){
+     	for(Topping t:belag){
+        
+        if(t.checkalergen(c)){
+          al+=c;
+          break;
+        }
+        
+      }
+     
+   }
+   if(al.length()>0){
+     if(al.at(0)!='A'){
+       al='A'+al;
+       }
+   }else{
+     if(al.length()==0){
+       al='A'+al;
+     }
+   }
+   
+   return al;
+ };
+
+void Pizza::accommodate(const string& forbidden){
+  vector<Topping> backup=belag;
+  for(char f:forbidden){
+    
+    for(unsigned long i{0};i<belag.size();){
+      
+      if(belag.at(i).checkalergen(f)){
+        
+        belag.erase(belag.begin()+i);
+        
+        
+      }else{i++;}
+      
+    }
+    
+  }
+  if(belag.empty()){
+    belag=backup;
+    throw runtime_error("Fehler");
+    
+  }
+  
+};
+
+double Pizza::price() const{
+  double preis{0};
+  int spezia{0};
+  for(Topping t:belag){
+    
+    if(t.is_specialty()){
+      spezia++;
+    }
+  }
+  if(belag.size()<=4){
+    return 7+spezia*0.5;
+  }
+  
+  if(belag.size()>4){
+    return 7+(belag.size()-4)+spezia*0.5;
+  }
+  
+  
+  
+  return preis;
+};
+
+ostream& Pizza::print(ostream& o){
+  
+   //[{Tomato sauce, Cheese (G)}, 7 Euro]
+	o<<"[{";
+  unsigned long i{1};
+  for(Topping t:belag){
+    t.print(o);
+    if(i!=belag.size()){
+    o<<", ";}
+    i++;
+  }
+  o<<"}, ";
+  o<<price();
+  o<<" Euro]";
+  return o;
+};
+
+ostream& operator<<(ostream& o, Pizza p){
+  return p.print(o);
+};
+
+

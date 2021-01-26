@@ -1,0 +1,141 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include "gebot.h"
+#include "lot.h"
+using namespace std;
+
+const vector<string> kategorie_namen{"Schmuck", "Moebel", "Kunst", "Sonstiges"};
+
+Lot::Lot(string n,int b,Kategorie kat){
+    if(n.length()<=0||b<=0||b>10000000){
+      throw runtime_error("fehler");
+    }
+    name=n;
+    min=b;
+    k=kat;
+  };
+
+
+  bool Lot::ist_offen() const{//Kategorie::Schmuck oder Kategorie::Kunst true
+    
+    if(k==Kategorie::Schmuck||k==Kategorie::Kunst){
+      
+      return true;
+    };
+    return false;
+  };
+  bool Lot::bieten(const Gebot& g){
+    //Retourniert false, falls es sich um eine offene Versteigerung handelt und der gebotene Betrag kleiner ist als der gewünschte Mindesterlös.
+    if(ist_offen()&&!(g>=min)){
+      
+      return false;
+    }
+    for(Gebot geb:gebvec){
+     if(geb.selbe_bieterin(g)&&geb.getgeb()>g.getgeb()){
+      
+        throw runtime_error("FEhler"); 
+       
+     }
+    }
+    gebvec.push_back(g);
+    return true;
+  };
+
+	 Gebot Lot::zuschlag() const{
+     int max{0},maxi{0};
+ 
+     if(gebvec.size()<=0){
+      throw runtime_error("Fehler"); 
+     }else{
+     if(!ist_offen()){
+      		for(Gebot g:gebvec){
+        			if(g.getgeb()>=max){
+         				max=g.getgeb();
+       				 }
+     			 }
+       	if(min>max){
+         	throw runtime_error("Fehler"); 
+       	}
+    	 }
+     }
+     max=0;
+     int a{0},b{0};
+     for(Gebot g:gebvec){
+        if(g.getgeb()>=max){
+         	max=g.getgeb();
+          if(maxi<max){
+            maxi=max;
+          a=b;
+          }
+       	}
+       b++;
+     }
+     
+     
+     
+     
+     return gebvec.at(a);
+   };
+	int Lot::anzgebot() const{
+    return gebvec.size();
+    
+  };
+
+	   vector<Lot> Lot::probleme(vector<Lot>& lots){
+       
+       vector<Lot> out;
+       vector<Lot> in;
+      	 
+       for(Lot l:lots)
+       {
+        if(l.anzgebot()==0){
+          out.push_back(l);
+        }else{
+          if(!l.ist_offen()&&!l.minerreicht()){
+          out.push_back(l);
+        	}else{
+            in.push_back(l);
+          }
+        }
+         
+         
+       }
+            
+       lots=in;
+       return out;
+     };
+
+		 bool Lot::minerreicht() const{
+
+         for(Gebot g:gebvec){
+           if(g.getgeb()>=min){
+             return true;
+           }
+         }
+         return false;
+ 
+       };
+
+  ostream& Lot::print(ostream& o){
+    //: [Kohinoor: 42 Euro, Schmuck {[Susi: 263 Euro], [Erwin: 43 Euro]}]
+    o<<"["<<name<<": "<<min<<" Euro, "<<kategorie_namen.at(static_cast<int>(k))<<" {";
+    unsigned long i{1};
+    for(Gebot g:gebvec)
+    {
+      
+      g.print(o);
+      if(i++!=gebvec.size()){
+       o<<", "; 
+      }
+    }
+    o<<"}]";
+    return o;
+    
+  };
+
+	ostream& operator<<(ostream& o, Lot l){
+    return l.print(o);
+    
+  };

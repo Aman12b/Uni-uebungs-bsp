@@ -1,0 +1,55 @@
+#include "exemplar.h"
+
+vector<string> zustand_namen{"neuwertig", "gut", "abgegriffen", "unbrauchbar"};
+
+
+		Exemplar::Exemplar(int auflagenum, Zustand z){
+      
+      if(!(auflagenum>=1&&auflagenum<=1000)){
+        throw runtime_error("Auflagenum out of range");
+      }
+      auflage=auflagenum;
+      verliehen =false;
+      zust=z;
+    };
+
+		bool Exemplar::verfuegbar()const{
+      
+      if(verliehen==true||zust==Zustand::Unbrauchbar){
+        return false;}
+      else{
+      return true;}
+    };
+
+		bool Exemplar::entleihen(){
+      
+       if(verliehen==true||zust==Zustand::Unbrauchbar){return false;}
+      
+      	verliehen=true;
+      	return true;
+    };
+
+		void Exemplar::retournieren(Zustand z){
+
+      if(zust>z||verliehen==false){
+        throw runtime_error("problem bei retournieren");
+      }
+      zust=z;
+      verliehen=false;
+    };
+
+		ostream& Exemplar::print(ostream& o){
+      //[Auflage: Auflagennummer, Zustand: Zustand, verliehen]
+      int z=static_cast<int>(zust);
+      if(verliehen==true){
+        o<<"[Auflage: "<<auflage<<", Zustand: "<<zustand_namen.at(z)<<", verliehen]";
+      }else{
+        o<<"[Auflage: "<<auflage<<", Zustand: "<<zustand_namen.at(z)<<"]";
+      }
+      return o;
+    };
+
+		ostream& operator<<(ostream& o,Exemplar e){
+      return e.print(o);
+      
+    };

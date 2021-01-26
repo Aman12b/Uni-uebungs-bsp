@@ -1,0 +1,28 @@
+#ifndef EXEMPLAR_H
+#define EXEMPLAR_H
+
+#include<iostream>
+#include<stdexcept>
+#include<string>
+#include<vector>
+using namespace std;
+
+enum class Zustand {Neuwertig, Gut, Abgegriffen, Unbrauchbar};
+extern vector<string> zustand_namen; 
+
+class Exemplar{
+  int auflage;
+  bool verliehen=false;
+  Zustand zust;
+  public:
+  Exemplar(int auflagenum,Zustand z=Zustand::Neuwertig);
+  bool verfuegbar()const;
+  bool entleihen();
+  void retournieren(Zustand z);
+  ostream& print(ostream& o);
+  
+};
+ostream& operator<<(ostream& o,Exemplar e);
+//Definition der Klasse Exemplar
+
+#endif

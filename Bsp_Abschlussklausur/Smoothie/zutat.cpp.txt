@@ -1,0 +1,35 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"zutat.h"
+using namespace std;
+
+
+  Zutat::Zutat(string Name, int brennwert){
+    
+    if(Name.length()<=0||brennwert>75||brennwert<10){
+     throw runtime_error("unzulaessige Werte");
+    }
+    name=Name;
+    kj=brennwert;
+  };
+  int Zutat::brennwert() const{
+    return kj;
+  };
+    
+  bool Zutat::operator==(Zutat z){
+    if(z.brennwert()==kj&&z.name==name){
+      return true;
+    }
+    return false;
+  };
+  ostream& Zutat::print(ostream& o){
+    // [Name Brennwert kJ]
+    o<<"["<<name<<" "<<kj<<" kJ]";
+    return o;
+  };
+
+	ostream& operator<<(ostream& o, Zutat z){
+    return z.print(o);
+  };

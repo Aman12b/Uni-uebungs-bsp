@@ -1,0 +1,26 @@
+#ifndef SMOOTHIE_H
+#define SMOOTHIE_H
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"zutat.h"
+using namespace std;
+
+//Definition der Klasse Smoothie
+class Smoothie{
+  string name;
+  vector<Zutat> zut;
+  
+  public:
+  Smoothie(string Name);
+  void hinzu(const Zutat& z);
+  int brennwert() const;
+  ostream& print(ostream& o);
+  void unterheben(const Zutat& z);
+  void liste(ostream& o) const;
+  
+};
+ostream& operator<<(ostream& o,Smoothie s);
+#endif

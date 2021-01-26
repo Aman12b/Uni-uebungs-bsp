@@ -1,0 +1,27 @@
+#ifndef KLEIDST_H
+#define KLEIDST_H
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+using namespace std;
+
+enum class Programm {Koch, Normal, Bunt, Fein};
+extern vector<string> programm_namen;
+//. Bezeichnung, Gewicht, und Pflegehinweis in dieser Reihenfolge. Der Pflegehinweis ist optional mit Defaultwert Programm::Normal
+class KleidSt{
+  string name;
+  int gewicht{0};
+  Programm p;
+  
+  public:
+  KleidSt(string Name, int Gewicht,Programm prog=Programm::Normal);
+  bool vertraeglich(Programm)const;
+  ostream& print(ostream& o);
+  int get_gewicht();
+  Programm get_pro();
+};
+	ostream& operator<<(ostream& o,KleidSt k);
+
+#endif

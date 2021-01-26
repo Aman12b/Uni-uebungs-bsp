@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"wagon.h"
+
+using namespace std;
+
+//Implementation der Klasse Wagon
+
+Wagon::Wagon(int m,Feature fe){
+  
+  if(m<5||m>100){
+    
+    throw runtime_error("FEhler");
+  }
+  masse=m;
+  f=fe;
+};
+
+   int Wagon::get_mass() const{
+     
+     return masse;
+   };
+   bool Wagon::has_feature(Feature fe) const{
+     if(fe==f){
+       return true;
+     }
+     return false;
+     
+   };
+
+	int Wagon::getfeature() const{
+    
+    return static_cast<int>(f);
+  };
+   ostream& Wagon::print(ostream& o){//[mass: 27 tons bar-wagon].
+     
+     return o<<"[mass: "<<masse<<" tons "<< feature_names.at(static_cast<int>(f))<<"-wagon]";    
+   };
+
+	ostream& operator<<(ostream& o,Wagon w){
+    return w.print(o);
+  };

@@ -1,0 +1,27 @@
+#ifndef TRAIN_H
+#define TRAIN_H
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"wagon.h"
+
+using namespace std;
+
+//Definition der Klasse Train
+	class Train{
+    int lokm{0},maxlast{0};
+    vector <Wagon> w;
+    public:
+    Train(int lokmasse,int max,vector<Wagon> wagons=vector<Wagon>()); //Lok-Masse (in Tonnen; ganze Zahl >=50 und <=200), eine Maximallast (in Tonnen; ganze Zahl >=200 und <=10.000) sowie eine Liste von Waggons
+    int total_load() const;
+    bool ready() const;
+    void couple(vector<Wagon>);
+    vector<Wagon> uncouple(size_t from);
+   ostream& print(ostream& o);
+    void sort();
+    void switches(size_t from, size_t count, Train& to, size_t pos);
+ };
+ostream& operator<<(ostream& o,Train t);
+#endif

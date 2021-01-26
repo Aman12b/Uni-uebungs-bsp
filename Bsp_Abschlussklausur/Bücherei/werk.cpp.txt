@@ -1,0 +1,81 @@
+#include"werk.h"
+using namespace std;
+
+
+
+Werk:: Werk(string Autor,string Name,int Erscheinungsjahr){
+	
+  if(!(Autor.length()>0)){
+   throw runtime_error("Autor ungeuetlig"); 
+  }
+  if(!(Name.length()>0)){
+   throw runtime_error("Name ungeuetlig"); 
+  }
+  if(!(Erscheinungsjahr>=1700&&Erscheinungsjahr<=2017)){
+   throw runtime_error("Erscheinungsjahr ungeuetlig"); 
+  }
+
+  autor=Autor;
+  name=Name;
+  jahr=Erscheinungsjahr;
+};
+void Werk::erwerben(int nr, Zustand z){
+  
+  if(Zustand::Unbrauchbar==z){
+    throw runtime_error("Zustand zu schlecht");
+  }
+  Exemplar ex(nr,z);
+  exp.push_back(ex);
+};
+
+bool Werk::entleihen(){
+  
+    for(Exemplar e:exp){
+      if(e.verfuegbar()){
+        e.entleihen();
+        return true;
+      }
+  	}
+  return false;
+};
+
+void Werk::retournieren(int index, Zustand z){
+  
+  int size=static_cast<int>(exp.size());
+  size--;
+  if(index>size||index<0){
+    throw runtime_error("index out of range");
+  }
+  if(exp.at(index).verfuegbar()==true){
+    throw runtime_error("fehler bei rueckgabe");
+  }
+  exp.at(index).retournieren(z);
+  
+};
+
+//m [Autor, Name, Erscheinungsjahr {Liste der Exemplare}]erfolgen, 
+//z.B.: [Adams, Hitchhiker, 1979 {[Auflage: 2, Zustand: gut], [Auflage: 1, Zustand: neuwertig, verliehen]}]
+
+ostream& Werk::print(ostream& o){
+
+  o<<"["<<autor<<", "<<name<<", "<<jahr<<" {";
+  int i{0};
+  int size{static_cast<int>(exp.size())};
+  size--;
+   for(Exemplar e:exp){
+     
+     e.print(o);
+     if(!(i==size))
+     {
+       o<<", ";
+     }
+     i++;
+   }
+  o<<"}]";
+  return o;
+};
+
+ostream& operator<<(ostream& o,Werk w){
+  return w.print(o);
+  
+};

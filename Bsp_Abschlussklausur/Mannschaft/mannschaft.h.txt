@@ -1,0 +1,24 @@
+#ifndef MANNSCHAFT_H
+#define MANNSCHAFT_H
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<stdexcept>
+#include"spieler.h"
+using namespace std;
+
+//Definition der Klasse Mannschaft
+class Mannschaft{
+  vector <Spieler> team;
+  string name;
+  public:
+  Mannschaft(string n,vector <Spieler> list=vector <Spieler> ());
+ 	vector<Spieler> engagieren(const vector<Spieler>&);
+  ostream& print(ostream& o);
+  string aufstellung() const;
+  vector<Spieler> entlassen(vector<Position>);
+};
+ ostream& operator<<(ostream& o,Mannschaft);
+
+#endif

@@ -1,0 +1,161 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"wagon.h"
+#include"train.h"
+
+using namespace std;
+
+//Implementation der Klasse Train
+
+Train::Train(int lokmasse,int max,vector<Wagon> wagons){
+//Lok-Masse (in Tonnen; ganze Zahl >=50 und <=200), eine Maximallast (in Tonnen; ganze Zahl >=200 und <=10.000) sowie eine Liste von Waggons
+    if(lokmasse>=50&&lokmasse<=200&&max>=200&&max<=10000){
+    	lokm =lokmasse;
+  		maxlast=max;
+  		w=wagons;
+    }else{throw runtime_error("Fehler"); }
+  
+};
+int Train::total_load() const{
+  int load{0};
+  
+  for(Wagon wa:w){
+    load+=wa.get_mass();
+    
+  };
+  return load+=lokm;
+};
+void Train::couple(vector<Wagon> wa){
+  
+  for(Wagon wag:wa){
+    w.push_back(wag);
+  }
+};
+vector<Wagon> Train::uncouple(size_t from){
+  vector<Wagon> out;
+  if(from<w.size()&&from>=0){
+
+ 		 for(size_t i{from};i<=w.size()-1;i++){
+   			 out.push_back(w.at(i));
+  		}
+  w.erase(w.begin()+from,w.end());
+  }else{
+    throw runtime_error("Fehler");
+  }
+  return out;
+};
+
+//[Gesamtlast/Maximallast tons, fahrbereit {Liste der Waggons}] 
+   ostream& Train::print(ostream& o){
+     
+     o<<"["<<total_load()<<"/"<<maxlast<<" tons, ";
+     if(ready()){
+       o<<"ready {";
+     }else{
+       o<<"not ready {";
+     }
+     unsigned long i{1};
+     for(Wagon wa:w){
+       wa.print(o);
+       if(i!=w.size()){
+        o<<", "; 
+       }
+       i++;
+     }
+     return o<<"}]";
+
+     
+ };
+void Train::switches(size_t from, size_t count, Train& to, size_t pos){
+  
+  if(w.size()<from+count){
+   throw runtime_error("fehler"); 
+  }
+ 
+  vector<Wagon> neu;
+  neu.assign(w.begin()+from, count); 
+  w.erase(w.begin()+from,count);
+  to.insert(to.begin()+pos,neu);
+ 
+  
+};
+
+
+
+ostream& operator<<(ostream& o,Train t){
+  
+  return t.print(o);
+};
+
+
+
+void Train::sort(){
+  vector<Wagon> neu;
+  for(int i{0};i<5;i++){
+  	 for(Wagon wa:w) {
+       if(wa.getfeature()==i){
+         neu.push_back(wa);
+       }
+     
+  	 }
+    
+  }
+  w=neu;
+  
+};
+
+
+	
+bool Train::ready() const{
+  //Retourniert true, falls der Zug fahrbereit ist, das heißt, die Gesamtlast des Zuges höchstens so groß (<=) ist
+	//wie die Maximallast, zumindest je ein Waggon mit jeder der möglichen Einrichtungen vorhanden ist und niemals mehr als drei Waggons
+	//hintereinander hängen, die nicht die Einrichtung Feature::Toilet anbieten.
+  
+  int a{0},b{0},c{0},d{0},e{0},cou{0};
+  int check;
+  if(total_load()<=maxlast){
+    for(Wagon wa:w){
+      if(check==static_cast<int>(Feature::Toilet)){
+        cou=0;
+      }else{
+        if(cou==3){
+       		return false; 
+      	}
+        cou++;
+      }
+      int getf{static_cast<int>(wa.getfeature())};
+      
+      switch(getf){
+        case 0:
+          a++;
+          break;
+        case 1:
+          b++;
+          break;  
+        case 2:
+          c++;
+        	break; 
+         case 3:
+          d++;
+          break;
+         case 4:
+          e++;
+          break;
+      }
+      check=wa.getfeature();
+      
+    }
+    if(a==0||b==0||c==0||d==0||e==0){
+      return false;
+    }
+    
+    return true;
+  }
+  return false;
+  
+  
+  
+  
+};

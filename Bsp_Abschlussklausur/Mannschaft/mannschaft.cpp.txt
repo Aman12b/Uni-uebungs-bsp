@@ -1,0 +1,150 @@
+#include<iostream>
+  #include<vector>
+  #include<string>
+  #include<stdexcept>
+  #include"spieler.h"
+  #include"mannschaft.h"
+  using namespace std;
+
+  //Implementierung der Klasse Mannschaft
+    Mannschaft::Mannschaft(string n,vector <Spieler> list){
+
+      if(n.length()<=0){
+        throw runtime_error("Fehler");
+      }
+      if(list.size()>=1){
+        for(unsigned long i{0};i<list.size()-1;i++){
+
+          for(unsigned long c{i+1};c<list.size()-1;c++){
+
+              if(list.at(i)==list.at(c)){
+                  throw runtime_error("FEhler doppler Spieler");
+              }
+          }
+
+        }
+      }
+      team=list;
+      name=n;
+
+    };
+
+    vector<Spieler> Mannschaft::engagieren(const vector<Spieler>& neu){
+
+      vector<Spieler> doppelt;
+      bool inside=false;
+      for(Spieler s:neu){
+
+        for(Spieler b:team){
+          if(b==s){
+            inside=true;
+          }
+        }
+        if(inside){
+         doppelt.push_back(s); 
+          inside=false;
+        }else{
+          team.push_back(s);
+        }
+
+      }
+
+      return doppelt;
+    };
+
+			string Mannschaft::aufstellung() const{
+        //enum class Position {Tor, Abwehr, Mitte, Sturm};
+        int t{0};
+    		int x{0};//abw
+      	int y{0};//mitt
+        int z{0};//sturn
+        
+        for(Spieler s:team)
+        {
+          int p=s.getp();
+          switch(p){
+              case 0:
+              t++;
+              break;
+            case 1:
+              x++;
+              break;
+            case 2:
+              y++;
+              break;
+            case 3:
+              z++;
+              break;
+              
+          }
+        }
+        if(!((x+y+z)==10&&t==1)){
+          throw runtime_error("m zu klein");
+        }
+        return to_string(x)+"-"+to_string(y)+"-"+to_string(z);
+    
+  		};
+
+
+		vector<Spieler> Mannschaft::entlassen(vector<Position> vp){
+      
+      vector<Spieler> ent;
+      vector<Spieler> neu;
+      vector<Position> v;
+      bool f=false;
+     	for(Position pos:vp){
+        bool inside=false;
+        for(Position posi:v){
+          if(posi==pos){inside=true;}
+        }
+        if(!inside){
+          v.push_back(pos);}
+        inside=false;
+      }
+        vp=v;
+        
+      	
+        for(Spieler s:team){
+      
+         	for(Position p:vp){
+          	 if(s.getp()==static_cast<int>(p)){
+          	   f=true;
+          	   ent.push_back(s);
+         	  	}    
+        	 }
+           if(!f){
+             neu.push_back(s);
+           }
+          f=false;
+        }
+  	  
+      team=neu;
+      return ent;
+      
+    };
+
+    ostream& Mannschaft::print(ostream& o){
+      // [Barcelona, {[Messi, 180 Mio Euro, Sturm], [Umtiti, 60 Mio Euro, Tor]}]
+
+      o<<"["<<name<<", {";
+      unsigned long i{1};
+      for( Spieler s: team){
+        s.print(o);
+        if(i!=team.size()){
+
+          o<<", ";
+        }
+        i++;
+      }
+      o<<"}]";
+      return o;
+
+
+    };
+
+   ostream& operator<<(ostream& o,Mannschaft m){
+     return m.print(o);
+
+   };
+
+
