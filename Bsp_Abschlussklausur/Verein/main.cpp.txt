@@ -1,0 +1,155 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"member.h"
+#include"association.h"
+using namespace std;
+
+int main()
+{
+  try {
+    // Member
+    cout << "Member\n";
+    try {
+      cout << Member{"", {Sport::Volleyball}} << '\n';
+      cout << "test 1\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 1\n";
+    }
+    try {
+      cout << Member{"Anna", {Sport::Swimming}} << '\n';
+      cout << Member{"Berta", {}} << '\n';
+      cout << "test 2\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 2\n";
+    }
+    try {
+      cout << Member{"Anna", {Sport::Volleyball}} << '\n';
+      cout << Member{"Anna", {Sport::Volleyball, Sport::Basketball, Sport::Swimming, Sport::Volleyball}} << '\n';
+      cout << "test 3\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 3\n";
+    }
+    try {
+      cout << Member{"Anna", {Sport::Volleyball, Sport::Basketball, Sport::Swimming, Sport::Basketball, Sport::Dancing}} << '\n';
+      cout << "test 4\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 4\n";
+    }
+
+    Member anna{"Anna", {Sport::Volleyball}};
+    Member peter{"Peter", {Sport::Chess, Sport::Dancing}};
+    const Member finn{"Finn", {Sport::Tennis, Sport::Basketball, Sport::Swimming}};
+
+    cout << anna << '\n';
+    cout << anna.practices_sport(Sport::Chess) << '\n';
+    cout << anna.practices_sport(Sport::Volleyball) << '\n';
+    cout << peter << '\n';
+    cout << peter.practices_sport(Sport::Volleyball) << '\n';
+    cout << peter.practices_sport(Sport::Chess) << '\n';
+    cerr << anna << '\n' << peter << '\n' << finn << '\n';
+
+    // Association
+    cout << "\nAssociation\n";
+    try {
+      cout << Association{"",{Sport::Volleyball},{anna}} << '\n';
+      cout << "test 5\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 5\n";
+    }
+    try {
+
+      cout << Association{"Vienna SC",{Sport::Chess},{anna}} << '\n';
+      cout << "test 6\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 6\n";
+    }
+    try {
+      cout << Association{"Vienna SC",{Sport::Chess, Sport::Volleyball},{anna, peter}} << '\n';
+      cout << Association{"Vienna SC",{},{anna}} << '\n';
+      cout << "test 7\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 7\n";
+    }
+    try {
+      cout << Association{"Vienna SC",{Sport::Chess, Sport::Volleyball},{}} << '\n';
+      cout << "test 8\n";
+    }
+    catch (runtime_error&) {
+      cout << "Error 8\n";
+    }
+  
+    Association vsc{"Vienna SC", {Sport::Chess, Sport::Volleyball}, {anna, peter}};
+    const Association db{"Die Besten", {Sport::Tennis, Sport::Chess, Sport::Volleyball, Sport::Dancing}, {peter, finn, anna}};
+    cout << vsc << '\n';
+    cout << vsc.calculate_revenue() << '\n';
+    cout << db << '\n';
+    cout << db.calculate_revenue() << '\n';
+    cout << vsc.add_sports({Sport::Dancing, Sport::Chess, Sport::Tennis, Sport::Basketball, Sport::Volleyball, Sport::Swimming}) << '\n';
+    cout << vsc << '\n';
+    cout << vsc.calculate_revenue() << '\n';
+    cerr << vsc << '\n' << db << '\n';
+  
+    Association club{"Club Vienna",{Sport::Volleyball, Sport::Soccer, Sport::Tennis, Sport::Basketball, Sport::Chess}, {anna, peter, finn}};
+    cout << club.calculate_revenue() << '\n';
+    Association soccer_no1{"Soccer No1", {Sport::Soccer}, {{"no one", {Sport::Soccer}}}};
+    cout << soccer_no1.calculate_revenue() << '\n';
+
+    //Dekommentieren für Zusatz 10 Punkte
+    
+    cout << "\nZusatz add_members 10 Punkte\n";
+    Member julia{"Julia", {Sport::Soccer}};
+    Member robert{"Robert",  {Sport::Basketball, Sport::Soccer}};
+    Member nina{"Nina", {Sport::Soccer, Sport::Swimming}};
+    cout << vsc << '\n';
+    for (const auto& m : vsc.add_members({julia, finn, robert, nina}))
+      cout << m << '\n';
+    cout << vsc << "\n\n";
+    cout << club << '\n';
+    for (const auto& m : club.add_members({julia, nina, robert}))
+      cout << m << '\n';
+    cout << club << "\n\n";
+    cout << soccer_no1 << '\n';
+    for (const auto& m : soccer_no1.add_members({nina, robert, finn, julia, anna, peter}))
+      cout << m << '\n';
+    cout << soccer_no1 << "\n\n";
+    
+
+    //Dekommentieren für Zusatz 15 Punkte
+    
+    cout << "\nZusatz stop 15 Punkte\n";
+    Member sarah{"Sarah", {Sport::Swimming, Sport::Volleyball}};
+    Member jim{"Jim", {Sport::Volleyball, Sport::Basketball}};
+    Member zoe{"Zoe", {Sport::Chess, Sport::Basketball, Sport::Swimming}};
+    Association fit{"Fit wie ein Turnschuh", {Sport::Chess, Sport::Volleyball, Sport::Dancing, Sport::Tennis,
+                                              Sport::Basketball, Sport::Swimming}, 
+                                             {sarah, peter, zoe, anna, jim}};
+
+    for (const auto& s : vector<Sport>{Sport::Basketball, Sport::Chess, Sport::Volleyball, Sport::Swimming,
+                                       Sport::Tennis, Sport::Soccer, Sport::Dancing}) {
+      cout << "Entferne Sport " << sport_names.at(static_cast<size_t>(s)) << ":\n";
+      try {
+        for (const auto& m : fit.stop(s))
+          cout << m << '\n';
+      }
+      catch (runtime_error&) {
+        cout << "Kann nicht entfernt werden\n";
+      }
+      cout << '\n';
+    }
+    
+  }
+  catch (exception& e) {
+    cout << "Unerwartete Exception: " << e.what() << '\n';
+  }
+  return 0;
+}
+

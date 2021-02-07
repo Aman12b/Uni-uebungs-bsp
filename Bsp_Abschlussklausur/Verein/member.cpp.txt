@@ -1,0 +1,54 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"member.h"
+using namespace std;
+
+//Implementierung der Klasse Member
+  Member::Member(string n,vector<Sport> sportvec){
+    if (n.length()<=0||sportvec.size()<=0){
+     throw runtime_error("Fehler"); 
+    }
+    for(unsigned long i{0};i<sportvec.size();i++){
+      
+      for(unsigned long a{i+1};a<sportvec.size();a++){
+      
+        if(sportvec.at(i)==sportvec.at(a)){
+          throw runtime_error("Fehler"); 
+        }
+    }
+    }
+    name=n;
+    svec=sportvec;
+    
+    
+  };
+  bool Member::practices_sport(Sport s) const{
+    
+    for(Sport sp:svec){
+     if(sp==s){
+      return true; 
+     }
+    }
+    return false;
+  };
+  ostream& Member::print(ostream& o){
+    //[Anna, {Volleyball, Dancing}].
+    o<<"["<<name<<", {";
+    unsigned long i{1};
+    for(Sport sp:svec){
+     o<<sport_names.at(static_cast<int>(sp)); 
+      if(i!=svec.size()){
+       o<<", "; 
+      }
+      i++;
+    }
+    return o<<"}]";
+    
+  };
+
+ostream& operator<<(ostream& o, Member m){
+  return m.print(o);
+  
+};

@@ -1,0 +1,23 @@
+#ifndef MEMBER_H
+#define MEMBER_H
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+using namespace std;
+
+enum class Sport{Volleyball, Dancing, Tennis, Chess, Soccer, Basketball, Swimming};
+const vector<string> sport_names{"Volleyball", "Dancing", "Tennis", "Chess", "Soccer", "Basketball", "Swimming"};
+
+//Definition der Klasse Member
+class Member{
+  string name;
+  vector<Sport> svec;
+  
+  public:
+  Member(string n,vector<Sport> sportvec);
+  bool practices_sport(Sport s) const;
+  ostream& print(ostream& o);
+};
+ostream& operator<<(ostream& o, Member m);
+#endif

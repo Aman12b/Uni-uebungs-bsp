@@ -1,0 +1,157 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"member.h"
+#include"association.h"
+using namespace std;
+
+//Implementierung der Klasse Association
+
+  Association::Association(string n,vector <Sport> s,vector<Member> m){
+    if(n.length()<=0||s.size()<=0||m.size()<=0){
+      
+     throw runtime_error("Fehler"); 
+    }
+   
+    int c{0};
+    for(Member meb:m){
+      for(Sport spo:s){
+       if(meb.practices_sport(spo)){
+        c++; 
+       }
+      }
+      if(c==0){
+         throw runtime_error("Fehler"); 
+      }
+      c=0;
+    }
+    
+    
+    name=n;
+      me=m; 
+      ofs=s;
+    
+  };
+	vector<Member> Association::add_members(const vector<Member>& mlist){
+    int c{0};
+    
+    vector <Member> out;
+    for(Member meb:mlist){
+      for(Sport spo:ofs){
+       if(meb.practices_sport(spo)){
+        c++; 
+       }
+      }
+      if(c==0){
+         out.push_back(meb);
+      }else{
+        me.push_back(meb);
+      }
+      c=0;
+    }
+    
+    return out;
+    
+    
+  };
+
+
+  int Association::add_sports(const vector<Sport>& slist){
+    int cou{0};
+    bool in=false;
+    for(Sport s:slist){
+      
+      for(Sport h:ofs){
+       if(s==h){
+         in =true;
+       }
+        
+      }
+      if(in==false){
+       ofs.push_back(s);
+        cou++;
+      }
+     in=false;
+    }
+    return cou;
+    
+  };
+  int Association::calculate_revenue() const{
+    int rev{0};
+    for(Member m:me){
+      rev+=100;
+     for(Sport s:ofs){
+       if(m.practices_sport(s)){
+         rev+=5;
+       }
+    	 }
+      
+    }
+    return rev;
+    
+  };
+
+
+  ostream& Association::print(ostream& o){
+    //Sporteln Wien, {Dancing, Volleyball}, 2 Mitglied(er)].
+    
+    o<<"["<<name<<", {";
+    unsigned long i{1};
+    for(Sport s:ofs){
+     o<<sport_names.at(static_cast<int>(s)); 
+      if(i!=ofs.size()){
+        o<<", ";
+      }
+      i++;
+    }
+    return o<<"}, "<<me.size()<<" Mitglied(er)]";
+    
+};
+
+vector<Member> Association::stop(Sport s){
+  
+  if(ofs.at(0)==s&&ofs.size()==1){
+         throw runtime_error("Fehler"); 
+  }
+  bool inside=false;
+  for(Sport sp:ofs){
+    if(sp==s){inside =true;}
+  }
+  if(inside==false){
+        throw runtime_error("Fehler");  
+  }
+  
+  
+  for(unsigned long i{0};i<ofs.size();i++){
+    
+    if(s==ofs.at(i)){
+     ofs.erase(ofs.begin()+i); 
+    }
+  }
+  vector <Member> in;
+  vector <Member> out;
+  
+  int c{0};
+  for(Member meb:me){
+      for(Sport spo:ofs){
+       if(meb.practices_sport(spo)){
+        c++; 
+       }
+      }
+      if(c==0){
+         out.push_back(meb);
+      }else{
+        
+       in.push_back(meb); 
+      }
+      c=0;
+    }
+  me=in;
+  return out;
+  
+};
+
+ostream& operator<<(ostream& o, Association a){
+  return a.print(o);
+};

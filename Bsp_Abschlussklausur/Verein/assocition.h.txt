@@ -1,0 +1,25 @@
+#ifndef ASSOCIATION_H
+#define ASSOCIATION_H
+#include<iostream>
+#include<string>
+#include<vector>
+#include<stdexcept>
+#include"member.h"
+using namespace std;
+
+//Definition der Klasse Association
+class Association{
+  string name;
+  vector <Member> me;
+  vector <Sport> ofs;
+  
+  public:
+  Association(string n,vector <Sport> s,vector<Member> m);
+  int add_sports(const vector<Sport>& slist);
+  int calculate_revenue() const;
+  vector<Member> add_members(const vector<Member>& mlist);
+  vector<Member> stop(Sport s);
+  ostream& print(ostream& o);
+};
+ostream& operator<<(ostream& o, Association a);
+#endif
